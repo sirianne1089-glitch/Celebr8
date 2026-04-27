@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Celebr8 3D Master Plan Blueprint</title>
+<style>
+:root{
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --color-text-primary:#15131A;
+  --color-text-secondary:#5F5A6B;
+  --color-text-tertiary:#8B8498;
+  --color-text-info:#2859C5;
+  --color-text-success:#167A4A;
+  --color-text-warning:#9A5B00;
+  --color-background-primary:#FFFFFF;
+  --color-background-secondary:#F6F4FA;
+  --color-background-info:#EEF4FF;
+  --color-background-success:#EEF9F3;
+  --color-background-warning:#FFF6E6;
+  --color-border-tertiary:#E5E0ED;
+  --color-border-secondary:#CFC7DC;
+  --border-radius-md:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:linear-gradient(135deg,#FFF8F0,#F8F5FF 40%,#F0FBF7);color:var(--color-text-primary);padding:20px}
+.sr-only{position:absolute;left:-9999px}
+.bp{max-width:1180px;margin:0 auto;background:rgba(255,255,255,.86);border:1px solid var(--color-border-tertiary);border-radius:22px;padding:18px;box-shadow:0 24px 80px rgba(36,24,64,.09);backdrop-filter:blur(10px)}
+.hero{border:1px solid var(--color-border-tertiary);border-radius:20px;padding:18px;margin-bottom:16px;background:radial-gradient(circle at top left,#FFF1D8,transparent 34%),radial-gradient(circle at top right,#EDE9FF,transparent 36%),#fff}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.kicker{font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:#8B4F00;margin-bottom:7px}
+h1{font-size:28px;line-height:1.1;margin-bottom:8px}
+.hero p{font-size:13px;color:var(--color-text-secondary);line-height:1.65;max-width:760px}
+.hero-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tabs{display:flex;gap:2px;margin-bottom:14px;border-bottom:0.5px solid var(--color-border-tertiary);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-size:12px;padding:9px 12px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap;border-radius:10px 10px 0 0}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:700;background:#fff}
+.panel{display:none}.panel.active{display:block}
+.section-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--color-text-tertiary);margin:16px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:9px}
+.card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 13px;background:var(--color-background-primary)}
+.card-title{font-size:12px;font-weight:700;color:var(--color-text-primary);margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.card-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.58}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.d-purple{background:#7F77DD}.d-coral{background:#D85A30}.d-teal{background:#1D9E75}.d-amber{background:#EF9F27}.d-red{background:#C03744}.d-blue{background:#2C72C7}
+.tag{font-size:10px;padding:2px 7px;border-radius:999px;display:inline-block;margin-top:7px;font-weight:600}
+.t-match{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.t-plus{background:var(--color-background-info);color:var(--color-text-info)}
+.t-uniq{background:var(--color-background-warning);color:var(--color-text-warning)}
+.t-ai{background:var(--color-background-success);color:var(--color-text-success)}
+.t-3d{background:#EEEDFE;color:#26215C}
+.t-mvp{background:#FFECE6;color:#8C2E16}
+.row{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;color:var(--color-text-secondary)}
+.row:last-child{border:none}
+.row-label{font-weight:700;color:var(--color-text-primary);min-width:165px;flex-shrink:0}
+.box{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;background:#fff}
+.three-up{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;font-size:12px;background:#fff}
+.three-up>div{padding:9px 12px;border-right:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.45}
+.three-up>div:nth-last-child(-n+3){border-bottom:none}
+.three-up>div:nth-child(3n){border-right:none}
+.three-up .head{font-size:11px;font-weight:700;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:1px;background:var(--color-background-secondary)}
+.col-good{color:var(--color-text-success);font-weight:600}
+.col-bad{color:var(--color-text-tertiary)}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px}
+.metric-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;background:#fff}
+.metric{display:flex;align-items:baseline;gap:7px;padding:6px 0}
+.metric-num{font-size:24px;font-weight:800;color:var(--color-text-primary)}
+.metric-label{font-size:12px;color:var(--color-text-secondary)}
+.feature-item{display:flex;gap:9px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.feature-item:last-child{border:none}
+.f-num{font-size:11px;color:var(--color-text-tertiary);font-weight:700;min-width:34px;flex-shrink:0;font-family:var(--font-mono)}
+.f-text{color:var(--color-text-secondary);line-height:1.55}
+.f-text strong{color:var(--color-text-primary);font-weight:700}
+.timeline{position:relative;padding-left:25px}
+.timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:var(--color-border-secondary)}
+.tl-item{position:relative;padding:9px 0 15px;font-size:12px}
+.tl-item::before{content:'';position:absolute;left:-22px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--color-background-primary);border:1.5px solid var(--color-border-secondary)}
+.tl-item.done::before{background:var(--color-text-success);border-color:var(--color-text-success)}
+.tl-item.now::before{background:var(--color-text-info);border-color:var(--color-text-info);box-shadow:0 0 0 4px var(--color-background-info)}
+.tl-week{font-size:11px;color:var(--color-text-tertiary);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.tl-title{font-size:13px;font-weight:800;color:var(--color-text-primary);margin-bottom:3px}
+.tl-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.58}
+.code{font-family:var(--font-mono);font-size:11px;background:#15131A;color:#F8F4FF;border-radius:12px;padding:12px;overflow:auto;line-height:1.55}
+.warn{background:#FFF6E6;border:1px solid #F2D8A8;border-radius:14px;padding:12px;font-size:12px;color:#5C3900;line-height:1.6}
+@media(max-width:720px){
+ body{padding:10px}
+ .bp{padding:12px}
+ h1{font-size:23px}
+ .row{display:block}
+ .row-label{display:block;margin-bottom:4px}
+ .three-up{grid-template-columns:1fr}
+ .three-up>div{border-right:none!important}
+ .three-up>div:nth-last-child(-n+3){border-bottom:0.5px solid var(--color-border-tertiary)}
+}
+</style>
+</head>
+<body>
+<h2 class="sr-only">Celebr8 complete 3D master plan blueprint with 50-template MVP, AI, RSVP, security, plans and build phases</h2>
+
+<div class="bp">
+  <div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="kicker">Celebr8 · 3D Invitation Platform · Master Blueprint</div>
+        <h1>Complete realistic MVP vision for a premium Indian + NRI invitation website</h1>
+        <p>
+          Celebr8 is a modern digital invitation platform for weddings, birthdays, housewarming, baby events,
+          festivals, corporate events and Telugu cultural occasions. The product uses cinematic 3D previews,
+          50 high-quality templates, Telugu / English / Hindi invite-language switching, RSVP tracking,
+          watermark-based free previews, premium plans, and a future-ready AI assistant roadmap.
+        </p>
+        <div class="hero-badges">
+          <span class="tag t-mvp">MVP: 50 templates</span>
+          <span class="tag t-3d">3D landing + invite reveal</span>
+          <span class="tag t-plus">Telugu · English · Hindi</span>
+          <span class="tag t-ai">AI assistant ready</span>
+          <span class="tag t-uniq">Watermark paywall</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showT(event,'vision')">3D vision</div>
+    <div class="tab" onclick="showT(event,'journey')">User journey</div>
+    <div class="tab" onclick="showT(event,'templates')">50 templates</div>
+    <div class="tab" onclick="showT(event,'parity')">Inytes parity</div>
+    <div class="tab" onclick="showT(event,'extras')">Our extras</div>
+    <div class="tab" onclick="showT(event,'pricing')">Plans</div>
+    <div class="tab" onclick="showT(event,'screens')">All screens</div>
+    <div class="tab" onclick="showT(event,'data')">Database/API</div>
+    <div class="tab" onclick="showT(event,'security')">Security</div>
+    <div class="tab" onclick="showT(event,'opt')">5x optimization</div>
+    <div class="tab" onclick="showT(event,'phases')">Build plan</div>
+    <div class="tab" onclick="showT(event,'future')">10-year roadmap</div>
+  </div>
+
+  <!-- 3D VISION -->
+  <div id="vision" class="panel active">
+    <div class="section-label">The 3D experience — what makes Celebr8 feel premium</div>
+    <div class="cards">
+      <div class="card"><div class="card-title"><span class="dot d-purple"></span>Floating 3D invite cards</div><div class="card-desc">Homepage hero shows 3 to 5 invite cards floating in depth. Cards gently rotate with mouse/touch movement.</div><span class="tag t-3d">hero</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-purple"></span>How-it-works video scroll</div><div class="card-desc">As the user scrolls, a background animation explains: choose template → edit details → share link → receive RSVP.</div><span class="tag t-3d">scroll story</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-coral"></span>Cinematic envelope reveal</div><div class="card-desc">Public invite opens with envelope animation, wax seal break, card rise, soft particles, and RSVP call-to-action.</div><span class="tag t-3d">invite open</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-coral"></span>Live preview tilt</div><div class="card-desc">During editing, card preview tilts naturally. Users feel like they are holding a premium digital card.</div><span class="tag t-3d">editor</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-teal"></span>Event-based particles</div><div class="card-desc">Wedding: petals/gold dust. Housewarming: diya glow. Birthday: balloons/confetti. Festivals: rangoli/sparkles.</div><span class="tag t-3d">emotion</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-amber"></span>3D template hover</div><div class="card-desc">Template cards lift, glow and rotate slightly on hover. Mobile uses lighter tap animation for performance.</div><span class="tag t-3d">browse</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-blue"></span>RSVP celebration</div><div class="card-desc">Accept RSVP triggers button morph, checkmark animation, and subtle confetti. No heavy animation on low-end phones.</div><span class="tag t-3d">conversion</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-red"></span>Premium plan focus</div><div class="card-desc">Pricing card uses tasteful 3D badge, not distracting effects. The user understands value quickly.</div><span class="tag t-mvp">monetization</span></div>
+    </div>
+
+    <div class="section-label">3D implementation rule</div>
+    <div class="warn"><strong>Important:</strong> 3D is an enhancement, not the product. The full app must work without heavy 3D. Use CSS 3D + Framer Motion first. Use Three.js only for homepage/template showcase. Mobile gets reduced animation to protect speed and battery.</div>
+
+    <div class="section-label">Technology choices</div>
+    <div class="box">
+      <div class="row"><span class="row-label">Framer Motion</span><span>Page transitions, envelope reveal, card hover, dashboard animations, RSVP success states.</span></div>
+      <div class="row"><span class="row-label">CSS 3D transforms</span><span>Card flip, tilt, template hover, envelope open. Fast and cheaper than heavy 3D rendering.</span></div>
+      <div class="row"><span class="row-label">Three.js / R3F</span><span>Only for homepage hero and optional advanced template carousel. Lazy-loaded after first paint.</span></div>
+      <div class="row"><span class="row-label">Canvas particles</span><span>Small event-based particles. Disabled/reduced for low-end devices and prefers-reduced-motion.</span></div>
+    </div>
+  </div>
+
+  <!-- JOURNEY -->
+  <div id="journey" class="panel">
+    <div class="section-label">Complete user journey — from landing to paid invite</div>
+    <div class="timeline">
+      <div class="tl-item now"><div class="tl-week">Step 1 · Public</div><div class="tl-title">User lands on homepage</div><div class="tl-desc">User sees 3D hero, sample invite animation, event categories, templates preview, pricing and FAQ. No login required.</div></div>
+      <div class="tl-item"><div class="tl-week">Step 2 · Public</div><div class="tl-title">Browse categories and templates</div><div class="tl-desc">User selects category such as Wedding, Birthday, Housewarming, Baby, Festival or Corporate. Each category has visible templates.</div></div>
+      <div class="tl-item"><div class="tl-week">Step 3 · Public preview</div><div class="tl-title">Open a demo invite</div><div class="tl-desc">User experiences envelope reveal, card preview, Telugu/English/Hindi language switch, RSVP demo and watermark.</div></div>
+      <div class="tl-item"><div class="tl-week">Step 4 · Try editor</div><div class="tl-title">Customize before signup</div><div class="tl-desc">User can change names, date, location, message and optional image temporarily. Watermark remains. Save/send/export locked.</div></div>
+      <div class="tl-item"><div class="tl-week">Step 5 · Conversion point</div><div class="tl-title">Login required only when saving</div><div class="tl-desc">When user clicks Save, Send, Export or Remove Watermark, app asks for signup/login. This avoids early bounce.</div></div>
+      <div class="tl-item"><div class="tl-week">Step 6 · Dashboard</div><div class="tl-title">Create event and manage guests</div><div class="tl-desc">Logged-in user sees dashboard, event list, invite editor, guest manager, share link, QR code and RSVP tracking.</div></div>
+      <div class="tl-item"><div class="tl-week">Step 7 · Monetization</div><div class="tl-title">Upgrade when value is clear</div><div class="tl-desc">Free plan keeps watermark and limits guests/templates. Paid plan removes watermark and unlocks premium features.</div></div>
+    </div>
+
+    <div class="section-label">Login and paywall logic</div>
+    <div class="three-up">
+      <div class="head">Action</div><div class="head">Allowed without login?</div><div class="head">Rule</div>
+      <div>Browse homepage/templates</div><div class="col-good">Yes</div><div>Public growth hook.</div>
+      <div>Try sample editor</div><div class="col-good">Yes</div><div>Temporary local state only. No save.</div>
+      <div>See 3D invite reveal</div><div class="col-good">Yes</div><div>Demo content with watermark.</div>
+      <div>Save real event</div><div class="col-bad">No</div><div>Signup/login required.</div>
+      <div>Send/share live invite</div><div class="col-bad">No</div><div>Login required; plan rules apply.</div>
+      <div>Remove watermark</div><div class="col-bad">No</div><div>Paid plan required.</div>
+    </div>
+  </div>
+
+  <!-- TEMPLATES -->
+  <div id="templates" class="panel">
+    <div class="section-label">MVP template strategy — 50 strong templates, not 680</div>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric"><span class="metric-num">50</span><span class="metric-label">launch templates</span></div><div class="card-desc">Enough for variety without delaying the project.</div></div>
+      <div class="metric-card"><div class="metric"><span class="metric-num">10</span><span class="metric-label">base layouts</span></div><div class="card-desc">Each base layout produces 5 style variants.</div></div>
+      <div class="metric-card"><div class="metric"><span class="metric-num">3</span><span class="metric-label">invite languages</span></div><div class="card-desc">Telugu, English and Hindi for invite text.</div></div>
+      <div class="metric-card"><div class="metric"><span class="metric-num">6</span><span class="metric-label">main categories</span></div><div class="card-desc">Focused launch categories with cultural relevance.</div></div>
+    </div>
+
+    <div class="section-label">50-template distribution</div>
+    <div class="cards">
+      <div class="card"><div class="card-title"><span class="dot d-red"></span>Wedding · 15</div><div class="card-desc">Telugu traditional, South Indian, North Indian, royal, floral, modern minimal, couple-photo, temple, destination wedding.</div><span class="tag t-mvp">highest revenue</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-amber"></span>Birthday · 10</div><div class="card-desc">Kids, first birthday, milestone birthday, adults, photo-based, party style, elegant minimal.</div><span class="tag t-plus">viral</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-teal"></span>Housewarming · 8</div><div class="card-desc">Gruhapravesam, Satyanarayana Vratham, modern home, traditional kalasam, Telugu family style.</div><span class="tag t-uniq">Telugu focus</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-purple"></span>Baby events · 7</div><div class="card-desc">Baby shower, naming ceremony, Annaprashana, cradle ceremony, gender-neutral pastel styles.</div><span class="tag t-plus">family</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-coral"></span>Festivals · 5</div><div class="card-desc">Diwali, Sankranti, Ugadi, Holi, Eid/Christmas generic celebration version.</div><span class="tag t-3d">seasonal</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-blue"></span>Corporate/Others · 5</div><div class="card-desc">Office party, grand opening, inauguration, community meetup, NRI reunion.</div><span class="tag t-ai">future B2B</span></div>
+    </div>
+
+    <div class="section-label">Template language behavior</div>
+    <div class="box">
+      <div class="row"><span class="row-label">Website UI</span><span>Start with English UI for MVP. Later add full UI translation.</span></div>
+      <div class="row"><span class="row-label">Invite/card language</span><span>Invite text can switch between Telugu, English and Hindi. Same design, translated text fields.</span></div>
+      <div class="row"><span class="row-label">Editable content</span><span>User can write custom text in any language. Provide default wording for each language.</span></div>
+      <div class="row"><span class="row-label">Font handling</span><span>Use reliable Indian language fonts. Telugu/Hindi text must not break layout or overflow on mobile.</span></div>
+    </div>
+
+    <div class="section-label">Dynamic template config example</div>
+    <pre class="code">{
+  "templateId": "wedding_telugu_royal_01",
+  "category": "wedding",
+  "baseLayout": "royal-centered-card",
+  "languageSupport": ["en", "te", "hi"],
+  "isPremium": true,
+  "supportsPhoto": true,
+  "fields": ["coupleNames", "eventDate", "eventTime", "venue", "message", "rsvpDeadline"],
+  "theme": {
+    "primary": "#8B1E2D",
+    "accent": "#D9A441",
+    "background": "temple-gold-pattern"
+  }
+}</pre>
+  </div>
+
+  <!-- PARITY -->
+  <div id="parity" class="panel">
+    <div class="section-label">Inytes-style parity — match basics, beat with focused MVP</div>
+    <div class="three-up">
+      <div class="head">Feature</div><div class="head">Typical invitation site</div><div class="head">Celebr8 MVP decision</div>
+      <div>Template browsing</div><div class="col-bad">Static gallery</div><div class="col-good">50 curated templates with 3D hover and category filters.</div>
+      <div>Login wall</div><div class="col-bad">Often early login</div><div class="col-good">Delayed login: browse and test before account creation.</div>
+      <div>Invite preview</div><div class="col-bad">Flat card preview</div><div class="col-good">Cinematic envelope reveal + live card preview.</div>
+      <div>Languages</div><div class="col-bad">Limited or English-first</div><div class="col-good">Telugu, English and Hindi invite text from v1.</div>
+      <div>Guests</div><div class="col-bad">Manual add</div><div class="col-good">Manual add + CSV upload in MVP.</div>
+      <div>WhatsApp</div><div class="col-bad">Manual share</div><div class="col-good">Manual WhatsApp deeplink first; API automation later.</div>
+      <div>RSVP</div><div class="col-bad">Basic accept/decline</div><div class="col-good">Accept/Maybe/Decline + message + dashboard status.</div>
+      <div>Watermark</div><div class="col-bad">Sometimes no clear model</div><div class="col-good">Free preview has Celebr8 watermark; paid removes it.</div>
+      <div>Payments</div><div class="col-bad">Per invite or subscription</div><div class="col-good">Simple launch plans; Stripe first, India payments later.</div>
+      <div>AI</div><div class="col-bad">Often not integrated</div><div class="col-good">AI FAQ helper v1; AI copy/translation v1.5.</div>
+    </div>
+  </div>
+
+  <!-- EXTRAS -->
+  <div id="extras" class="panel">
+    <div class="section-label">Unique features for Celebr8</div>
+    <div class="feature-item"><span class="f-num">01</span><div class="f-text"><strong>Telugu-state cultural focus</strong> — Gruhapravesam, Annaprashana, Naming Ceremony, Satyanarayana Vratham, Half Saree, Dhoti Ceremony and regional festival styles.</div></div>
+    <div class="feature-item"><span class="f-num">02</span><div class="f-text"><strong>Delayed authentication</strong> — users experience value first, then login when they save/send/remove watermark.</div></div>
+    <div class="feature-item"><span class="f-num">03</span><div class="f-text"><strong>Watermark monetization</strong> — free previews are usable but branded; premium removes watermark for professional sharing.</div></div>
+    <div class="feature-item"><span class="f-num">04</span><div class="f-text"><strong>AI assistant</strong> — chat widget answers pricing, RSVP, template, language, sharing and account questions.</div></div>
+    <div class="feature-item"><span class="f-num">05</span><div class="f-text"><strong>WhatsApp-first sharing</strong> — users can quickly share invite link through WhatsApp without expensive API automation in MVP.</div></div>
+    <div class="feature-item"><span class="f-num">06</span><div class="f-text"><strong>QR code bridge</strong> — every invite gets a QR code for physical cards, printouts and venue display.</div></div>
+    <div class="feature-item"><span class="f-num">07</span><div class="f-text"><strong>RSVP dashboard</strong> — event owner can see total guests, accepted, declined, maybe, pending and messages.</div></div>
+    <div class="feature-item"><span class="f-num">08</span><div class="f-text"><strong>Modern 3D marketing</strong> — website itself becomes a demo. The landing page shows exactly how the invite experience works.</div></div>
+    <div class="feature-item"><span class="f-num">09</span><div class="f-text"><strong>Future scalable template system</strong> — 50 now, 300+ later, using base layouts and variants instead of rebuilding everything.</div></div>
+    <div class="feature-item"><span class="f-num">10</span><div class="f-text"><strong>NRI-ready foundation</strong> — timezone, USD payments, family sharing and bilingual card options can be added cleanly.</div></div>
+
+    <div class="section-label">AI features split by launch phase</div>
+    <div class="cards">
+      <div class="card"><div class="card-title"><span class="dot d-teal"></span>AI FAQ Assistant · v1</div><div class="card-desc">Small chatbot for support: pricing, how to create invite, how RSVP works, why watermark is shown, refund/help.</div><span class="tag t-ai">MVP safe</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-purple"></span>AI Invite Copy · v1.5</div><div class="card-desc">User enters event details. AI generates formal, emotional invitation wording in English/Telugu/Hindi.</div><span class="tag t-ai">after launch</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-amber"></span>AI Translation Polish · v1.5</div><div class="card-desc">AI improves awkward translations and makes them culturally natural, especially Telugu and Hindi.</div><span class="tag t-ai">quality</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-coral"></span>AI Template Suggestion · v2</div><div class="card-desc">User says event type and style. AI recommends best template and default wording.</div><span class="tag t-ai">future</span></div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div id="pricing" class="panel">
+    <div class="section-label">Recommended launch pricing plans</div>
+    <div class="three-up">
+      <div class="head">Plan</div><div class="head">User limit</div><div class="head">Best use</div>
+      <div>Free Preview</div><div class="col-good">$0</div><div>Browse templates, demo invite, temporary edit, watermark visible, no save/send.</div>
+      <div>Starter</div><div class="col-good">$4.99 / invite</div><div>1 event, up to 50 guests, basic templates, watermark removed, share link + QR.</div>
+      <div>Premium</div><div class="col-good">$9.99 / invite</div><div>1 event, up to 250 guests, all templates, RSVP dashboard, CSV upload, no watermark.</div>
+      <div>Family Monthly</div><div class="col-good">$14.99 / month</div><div>Multiple family events, 500 guests/month, premium templates, dashboard.</div>
+      <div>Corporate / Custom</div><div class="col-good">Custom</div><div>Team seats, branded invites, event analytics, future bulk email/WhatsApp automation.</div>
+    </div>
+
+    <div class="section-label">Payment rollout</div>
+    <div class="box">
+      <div class="row"><span class="row-label">MVP payment</span><span>Stripe for USD first. Simple and fast to launch.</span></div>
+      <div class="row"><span class="row-label">India payment</span><span>Razorpay/PhonePe/UPI later, after MVP is stable and business registration/payment requirements are clear.</span></div>
+      <div class="row"><span class="row-label">Cost control</span><span>No automated WhatsApp/SMS in MVP. Manual share keeps cost near zero until real revenue.</span></div>
+      <div class="row"><span class="row-label">Refund policy</span><span>Clear refund policy page needed before launch, especially for paid digital products.</span></div>
+    </div>
+  </div>
+
+  <!-- SCREENS -->
+  <div id="screens" class="panel">
+    <div class="section-label">Public screens</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">Homepage /</div><div class="card-desc">3D hero, how-it-works scroll video, categories, featured templates, pricing preview, AI FAQ entry, testimonials.</div><span class="tag t-3d">3D</span></div>
+      <div class="card"><div class="card-title">Templates /templates</div><div class="card-desc">50 template gallery. Filters: category, style, language, free/premium. 3D hover preview.</div><span class="tag t-mvp">core</span></div>
+      <div class="card"><div class="card-title">Template detail /templates/[slug]</div><div class="card-desc">Large preview, language switch, sample invite, use template CTA, premium/free badge.</div><span class="tag t-plus">conversion</span></div>
+      <div class="card"><div class="card-title">Demo invite /demo/[template]</div><div class="card-desc">Envelope reveal, sample RSVP, watermark, language switch, CTA to customize.</div><span class="tag t-3d">viral</span></div>
+      <div class="card"><div class="card-title">Pricing /pricing</div><div class="card-desc">Free, Starter, Premium, Family Monthly, Corporate. Clear feature comparison.</div><span class="tag t-mvp">money</span></div>
+      <div class="card"><div class="card-title">FAQ /help</div><div class="card-desc">Searchable FAQ and AI assistant entry. Explain watermarks, RSVP, payment and sharing.</div><span class="tag t-ai">support</span></div>
+    </div>
+
+    <div class="section-label">Auth screens</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">Signup /auth/signup</div><div class="card-desc">Email/password and Google. Show reason: Save invite, share, remove watermark.</div></div>
+      <div class="card"><div class="card-title">Login /auth/login</div><div class="card-desc">Email/password and Google. Continue existing draft after login.</div></div>
+      <div class="card"><div class="card-title">Reset /auth/reset</div><div class="card-desc">Password reset flow. Clean success animation.</div></div>
+    </div>
+
+    <div class="section-label">Dashboard screens</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">Dashboard /dashboard</div><div class="card-desc">Stats, recent events, quick create, RSVP notifications, plan usage.</div></div>
+      <div class="card"><div class="card-title">Create event /dashboard/create</div><div class="card-desc">Wizard: event type → template → details → language → preview → save.</div></div>
+      <div class="card"><div class="card-title">Editor /dashboard/events/[id]/editor</div><div class="card-desc">Form left, live 3D preview right. Watermark preview for free plan.</div></div>
+      <div class="card"><div class="card-title">Guests /dashboard/events/[id]/guests</div><div class="card-desc">Manual add, CSV upload, groups, guest status, delete/edit.</div></div>
+      <div class="card"><div class="card-title">Share /dashboard/events/[id]/share</div><div class="card-desc">Copy link, WhatsApp deeplink, QR code, preview public page.</div></div>
+      <div class="card"><div class="card-title">RSVP /dashboard/events/[id]/rsvp</div><div class="card-desc">Accepted, declined, maybe, pending, guest messages, export CSV.</div></div>
+      <div class="card"><div class="card-title">Billing /dashboard/billing</div><div class="card-desc">Current plan, upgrade CTA, invoices, Stripe customer portal.</div></div>
+      <div class="card"><div class="card-title">Settings /dashboard/settings</div><div class="card-desc">Profile, timezone, default language, notifications, account deletion.</div></div>
+    </div>
+
+    <div class="section-label">Guest/public invite screens</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">Public invite /invite/[code]</div><div class="card-desc">Envelope reveal, event details, map, RSVP form, add-to-calendar, language switch.</div><span class="tag t-3d">main</span></div>
+      <div class="card"><div class="card-title">RSVP confirmed</div><div class="card-desc">Thank-you state, calendar add, direction/map, optional message to host.</div></div>
+      <div class="card"><div class="card-title">Expired RSVP</div><div class="card-desc">Deadline reached message; contact host option if enabled.</div></div>
+    </div>
+  </div>
+
+  <!-- DATA/API -->
+  <div id="data" class="panel">
+    <div class="section-label">Core database tables</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">users</div><div class="card-desc">id, email, name, avatar, default_language, timezone, role, created_at.</div></div>
+      <div class="card"><div class="card-title">profiles</div><div class="card-desc">user_id, phone, country, nri_flag, billing_customer_id, marketing_consent.</div></div>
+      <div class="card"><div class="card-title">templates</div><div class="card-desc">id, slug, category, layout_config, language_defaults, is_premium, status.</div></div>
+      <div class="card"><div class="card-title">events</div><div class="card-desc">id, user_id, template_id, title, type, date, time, timezone, venue, status.</div></div>
+      <div class="card"><div class="card-title">event_content</div><div class="card-desc">event_id, language, names, message, custom_fields, image_url.</div></div>
+      <div class="card"><div class="card-title">guests</div><div class="card-desc">id, event_id, name, email, phone, group, language, unique_invite_code.</div></div>
+      <div class="card"><div class="card-title">rsvps</div><div class="card-desc">id, guest_id, event_id, status, plus_ones, message, submitted_at.</div></div>
+      <div class="card"><div class="card-title">plans/subscriptions</div><div class="card-desc">user_id, plan, status, limits, stripe_subscription_id, expires_at.</div></div>
+      <div class="card"><div class="card-title">payments</div><div class="card-desc">user_id, event_id, amount, currency, provider, status, invoice_url.</div></div>
+      <div class="card"><div class="card-title">audit_logs</div><div class="card-desc">user_id, action, entity_type, entity_id, metadata, created_at.</div></div>
+    </div>
+
+    <div class="section-label">API routes</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">/api/templates</div><div class="card-desc">Fetch active templates, filter by category/language/premium.</div></div>
+      <div class="card"><div class="card-title">/api/events</div><div class="card-desc">Create/update/list events for logged-in user.</div></div>
+      <div class="card"><div class="card-title">/api/guests/import</div><div class="card-desc">Validate and import CSV guest list.</div></div>
+      <div class="card"><div class="card-title">/api/rsvp</div><div class="card-desc">Public RSVP submission by invite code.</div></div>
+      <div class="card"><div class="card-title">/api/qr/[eventId]</div><div class="card-desc">Generate QR code for public invite link.</div></div>
+      <div class="card"><div class="card-title">/api/checkout</div><div class="card-desc">Create Stripe checkout session for selected plan.</div></div>
+      <div class="card"><div class="card-title">/api/webhooks/stripe</div><div class="card-desc">Update payments and plan status.</div></div>
+      <div class="card"><div class="card-title">/api/ai/faq</div><div class="card-desc">AI FAQ assistant using approved site knowledge only.</div></div>
+      <div class="card"><div class="card-title">/api/og/[code]</div><div class="card-desc">Generate OpenGraph image for shared invite link.</div></div>
+    </div>
+  </div>
+
+  <!-- SECURITY -->
+  <div id="security" class="panel">
+    <div class="section-label">Security and content protection</div>
+    <div class="warn"><strong>Reality:</strong> Browsers cannot fully stop screenshots. Users can use another phone, OS screenshot, screen recording or browser tools. The correct business solution is watermarking, premium unlock, access control and abuse prevention.</div>
+
+    <div class="feature-item"><span class="f-num">S1</span><div class="f-text"><strong>Watermark free previews</strong> — non-paid and demo previews show “Created with Celebr8” watermark across preview and public demo.</div></div>
+    <div class="feature-item"><span class="f-num">S2</span><div class="f-text"><strong>Remove watermark after payment</strong> — only paid plan/event removes watermark on public invite and downloadable/printable assets.</div></div>
+    <div class="feature-item"><span class="f-num">S3</span><div class="f-text"><strong>Public invite token</strong> — invite URLs use random, non-guessable codes, not sequential event IDs.</div></div>
+    <div class="feature-item"><span class="f-num">S4</span><div class="f-text"><strong>Row-level security</strong> — users can only read/update their own events, guests and payments.</div></div>
+    <div class="feature-item"><span class="f-num">S5</span><div class="f-text"><strong>Rate limiting</strong> — protect RSVP submit, AI FAQ, auth and CSV upload from abuse.</div></div>
+    <div class="feature-item"><span class="f-num">S6</span><div class="f-text"><strong>Input sanitization</strong> — sanitize invite message, names, venue and custom text to prevent XSS.</div></div>
+    <div class="feature-item"><span class="f-num">S7</span><div class="f-text"><strong>Image upload rules</strong> — file size limit, allowed formats, virus scanning/provider checks, private storage if needed.</div></div>
+    <div class="feature-item"><span class="f-num">S8</span><div class="f-text"><strong>Privacy pages</strong> — Terms, Privacy Policy, Refund Policy, Cookie notice and account deletion path before paid launch.</div></div>
+    <div class="feature-item"><span class="f-num">S9</span><div class="f-text"><strong>Admin controls</strong> — admin can disable abusive templates/events, view reports, manage template status.</div></div>
+    <div class="feature-item"><span class="f-num">S10</span><div class="f-text"><strong>Analytics privacy</strong> — track opens/RSVPs without exposing guest personal details publicly.</div></div>
+  </div>
+
+  <!-- OPT -->
+  <div id="opt" class="panel">
+    <div class="section-label">5x optimization targets</div>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric"><span class="metric-num">&lt;1s</span><span class="metric-label">first load target</span></div><div class="card-desc">Landing must feel instant. Lazy-load 3D after core content.</div></div>
+      <div class="metric-card"><div class="metric"><span class="metric-num">95+</span><span class="metric-label">Lighthouse target</span></div><div class="card-desc">Performance, accessibility, best practices and SEO.</div></div>
+      <div class="metric-card"><div class="metric"><span class="metric-num">&lt;500KB</span><span class="metric-label">initial JS target</span></div><div class="card-desc">Do not ship all templates/3D libraries upfront.</div></div>
+      <div class="metric-card"><div class="metric"><span class="metric-num">390px</span><span class="metric-label">mobile-first viewport</span></div><div class="card-desc">Design for phone first, desktop as enhancement.</div></div>
+    </div>
+
+    <div class="section-label">Optimization rules</div>
+    <div class="feature-item"><span class="f-num">O1</span><div class="f-text"><strong>Route-based code splitting</strong> — pricing page should not load dashboard or 3D editor code.</div></div>
+    <div class="feature-item"><span class="f-num">O2</span><div class="f-text"><strong>Lazy template assets</strong> — load visible templates first; fetch details when user clicks.</div></div>
+    <div class="feature-item"><span class="f-num">O3</span><div class="f-text"><strong>Image optimization</strong> — AVIF/WebP, responsive sizes, blur placeholders, CDN caching.</div></div>
+    <div class="feature-item"><span class="f-num">O4</span><div class="f-text"><strong>Reduced motion support</strong> — respect prefers-reduced-motion and low-power devices.</div></div>
+    <div class="feature-item"><span class="f-num">O5</span><div class="f-text"><strong>Edge caching</strong> — public templates and invite pages should be CDN-friendly.</div></div>
+    <div class="feature-item"><span class="f-num">O6</span><div class="f-text"><strong>Database indexing</strong> — index user_id, event_id, invite_code, template category and RSVP status.</div></div>
+    <div class="feature-item"><span class="f-num">O7</span><div class="f-text"><strong>Skeleton UI</strong> — every loading state should feel premium, no plain spinners everywhere.</div></div>
+  </div>
+
+  <!-- PHASES -->
+  <div id="phases" class="panel">
+    <div class="section-label">Build sequence — strict order for Claude Code</div>
+    <div class="timeline">
+      <div class="tl-item now"><div class="tl-week">Phase 0 · Foundation</div><div class="tl-title">Project setup</div><div class="tl-desc">Next.js, Tailwind, Supabase, auth config, Vercel deploy, environment variables, app shell and design tokens.</div></div>
+      <div class="tl-item"><div class="tl-week">Week 1</div><div class="tl-title">Public homepage + template browsing</div><div class="tl-desc">3D hero, how-it-works scroll, categories, 50 template metadata, filters, template detail page.</div></div>
+      <div class="tl-item"><div class="tl-week">Week 2</div><div class="tl-title">Editor + live preview</div><div class="tl-desc">Temporary editor without login, live preview, Telugu/English/Hindi content switching, watermark overlay.</div></div>
+      <div class="tl-item"><div class="tl-week">Week 3</div><div class="tl-title">Auth + dashboard</div><div class="tl-desc">Signup/login, dashboard shell, event list, create event wizard, save draft after login.</div></div>
+      <div class="tl-item"><div class="tl-week">Week 4</div><div class="tl-title">Guests + public invite + RSVP</div><div class="tl-desc">Guest table, CSV import, unique invite link, envelope reveal, RSVP form, status dashboard.</div></div>
+      <div class="tl-item"><div class="tl-week">Week 5</div><div class="tl-title">Sharing + QR + billing</div><div class="tl-desc">Copy link, WhatsApp deeplink, QR code, Stripe checkout, plan enforcement, watermark removal logic.</div></div>
+      <div class="tl-item"><div class="tl-week">Week 6</div><div class="tl-title">Security + QA + launch polish</div><div class="tl-desc">RLS, rate limiting, validation, mobile QA, performance budget, privacy/terms/refund pages, launch checklist.</div></div>
+      <div class="tl-item"><div class="tl-week">Post-MVP</div><div class="tl-title">AI + automation</div><div class="tl-desc">AI invite copy, AI translation polish, email automation, WhatsApp API, advanced analytics.</div></div>
+    </div>
+
+    <div class="section-label">Golden rules</div>
+    <div class="feature-item"><span class="f-num">R1</span><div class="f-text"><strong>Do not build 680 templates first.</strong> Launch with 50 high-quality templates and validate demand.</div></div>
+    <div class="feature-item"><span class="f-num">R2</span><div class="f-text"><strong>Do not force login too early.</strong> Let users preview and edit first; ask login at save/send/export.</div></div>
+    <div class="feature-item"><span class="f-num">R3</span><div class="f-text"><strong>Do not automate WhatsApp in MVP.</strong> Use manual deeplink first to avoid cost and approval delay.</div></div>
+    <div class="feature-item"><span class="f-num">R4</span><div class="f-text"><strong>Database before UI.</strong> No fake dashboard that cannot persist data.</div></div>
+    <div class="feature-item"><span class="f-num">R5</span><div class="f-text"><strong>Mobile first.</strong> Most users will open invites on phones.</div></div>
+    <div class="feature-item"><span class="f-num">R6</span><div class="f-text"><strong>Performance is product.</strong> Premium animation must not make app slow.</div></div>
+  </div>
+
+  <!-- FUTURE -->
+  <div id="future" class="panel">
+    <div class="section-label">10-year future-ready roadmap</div>
+    <div class="cards">
+      <div class="card"><div class="card-title"><span class="dot d-teal"></span>AI invite generator</div><div class="card-desc">Generate culturally correct invitation text from simple event details in Telugu, English and Hindi.</div><span class="tag t-ai">v1.5</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-purple"></span>AI design assistant</div><div class="card-desc">Suggest template, colors, background and wording based on event type and family style.</div><span class="tag t-ai">v2</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-coral"></span>Video invites</div><div class="card-desc">Export animated MP4 invite for WhatsApp Status, Instagram Reels and family groups.</div><span class="tag t-3d">v2</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-amber"></span>Mini event websites</div><div class="card-desc">Full event page with story, gallery, location, schedule, accommodation and registry.</div><span class="tag t-plus">v2</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-blue"></span>Automated reminders</div><div class="card-desc">Email/SMS/WhatsApp reminders to non-responders, only after revenue supports usage cost.</div><span class="tag t-plus">v2</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-red"></span>QR check-in</div><div class="card-desc">Door check-in with unique guest QR, real-time attendance and guest list export.</div><span class="tag t-uniq">premium</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-teal"></span>Vendor marketplace</div><div class="card-desc">Connect users to decorators, photographers, caterers and venues later.</div><span class="tag t-uniq">business</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-purple"></span>Mobile app/PWA</div><div class="card-desc">Installable app-like experience, push notifications and offline drafts.</div><span class="tag t-plus">scale</span></div>
+    </div>
+
+    <div class="section-label">Expansion logic</div>
+    <div class="box">
+      <div class="row"><span class="row-label">Now</span><span>50 templates, MVP editor, RSVP, watermark, Stripe, manual sharing.</span></div>
+      <div class="row"><span class="row-label">After traction</span><span>100+ templates, AI copy, email automation, richer analytics, Hindi/Telugu quality improvements.</span></div>
+      <div class="row"><span class="row-label">After revenue</span><span>WhatsApp API, SMS fallback, India payments, QR check-in, video export.</span></div>
+      <div class="row"><span class="row-label">Long term</span><span>Marketplace, corporate events, mobile app, large-scale template creator/admin system.</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showT(e,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  e.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>

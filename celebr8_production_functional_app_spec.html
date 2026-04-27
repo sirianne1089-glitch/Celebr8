@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Celebr8 Production Functional App Specification</title>
+<style>
+:root{
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --primary:#15131A;
+  --secondary:#5F5A6B;
+  --tertiary:#8B8498;
+  --info:#2859C5;
+  --success:#167A4A;
+  --warning:#9A5B00;
+  --danger:#B3261E;
+  --bg:#FFFFFF;
+  --bg2:#F6F4FA;
+  --info-bg:#EEF4FF;
+  --success-bg:#EEF9F3;
+  --warning-bg:#FFF6E6;
+  --danger-bg:#FDECEC;
+  --border:#E5E0ED;
+  --border2:#CFC7DC;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:linear-gradient(135deg,#FFF8F0,#F8F5FF 42%,#F0FBF7);color:var(--primary);padding:20px}
+.bp{max-width:1240px;margin:0 auto;background:rgba(255,255,255,.9);border:1px solid var(--border);border-radius:24px;padding:18px;box-shadow:0 24px 80px rgba(36,24,64,.10);backdrop-filter:blur(12px)}
+.hero{border:1px solid var(--border);border-radius:22px;padding:20px;margin-bottom:16px;background:radial-gradient(circle at top left,#FFF1D8,transparent 34%),radial-gradient(circle at top right,#EDE9FF,transparent 36%),#fff}
+.kicker{font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:#8B4F00;margin-bottom:8px}
+h1{font-size:29px;line-height:1.08;margin-bottom:8px}
+.hero p{font-size:13px;color:var(--secondary);line-height:1.65;max-width:900px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tabs{display:flex;gap:2px;margin-bottom:14px;border-bottom:0.5px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-size:12px;padding:9px 12px;cursor:pointer;color:var(--secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap;border-radius:10px 10px 0 0}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:800;background:#fff}
+.panel{display:none}.panel.active{display:block}
+.section-label{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--tertiary);margin:16px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:9px}
+.card{border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 13px;background:var(--bg)}
+.card-title{font-size:12px;font-weight:800;color:var(--primary);margin-bottom:5px;display:flex;align-items:center;gap:7px}
+.card-desc{font-size:11px;color:var(--secondary);line-height:1.58}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.d-purple{background:#7F77DD}.d-coral{background:#D85A30}.d-teal{background:#1D9E75}.d-amber{background:#EF9F27}.d-red{background:#C03744}.d-blue{background:#2C72C7}.d-black{background:#15131A}
+.tag{font-size:10px;padding:2px 7px;border-radius:999px;display:inline-block;margin-top:7px;font-weight:700}
+.t-mvp{background:#FFECE6;color:#8C2E16}.t-prod{background:#15131A;color:#fff}.t-api{background:var(--info-bg);color:var(--info)}.t-db{background:var(--success-bg);color:var(--success)}.t-risk{background:var(--warning-bg);color:var(--warning)}.t-sec{background:var(--danger-bg);color:var(--danger)}.t-ui{background:#EEEDFE;color:#26215C}
+.box{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;background:#fff}
+.row{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border);font-size:12px;color:var(--secondary);line-height:1.5}
+.row:last-child{border:none}
+.row-label{font-weight:800;color:var(--primary);min-width:190px;flex-shrink:0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.three-up,.four-up{display:grid;gap:0;border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;font-size:12px;background:#fff}
+.three-up{grid-template-columns:1fr 1fr 1fr}
+.four-up{grid-template-columns:1fr 1fr 1fr 1fr}
+.three-up>div,.four-up>div{padding:9px 12px;border-right:0.5px solid var(--border);border-bottom:0.5px solid var(--border);line-height:1.45}
+.three-up>div:nth-child(3n),.four-up>div:nth-child(4n){border-right:none}
+.three-up .head,.four-up .head{font-size:11px;font-weight:800;color:var(--tertiary);text-transform:uppercase;letter-spacing:1px;background:var(--bg2)}
+.good{color:var(--success);font-weight:700}.bad{color:var(--danger);font-weight:700}.muted{color:var(--tertiary)}
+.feature{display:flex;gap:9px;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:12px}
+.feature:last-child{border:none}
+.num{font-size:11px;color:var(--tertiary);font-weight:800;min-width:42px;flex-shrink:0;font-family:var(--font-mono)}
+.text{color:var(--secondary);line-height:1.55}
+.text strong{color:var(--primary);font-weight:800}
+.code{font-family:var(--font-mono);font-size:11px;background:#15131A;color:#F8F4FF;border-radius:12px;padding:12px;overflow:auto;line-height:1.55;white-space:pre}
+.warn{background:#FFF6E6;border:1px solid #F2D8A8;border-radius:14px;padding:12px;font-size:12px;color:#5C3900;line-height:1.6}
+.ok{background:#EEF9F3;border:1px solid #BFE8CF;border-radius:14px;padding:12px;font-size:12px;color:#0D4A2C;line-height:1.6}
+.timeline{position:relative;padding-left:25px}
+.timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:var(--border2)}
+.tl{position:relative;padding:9px 0 15px;font-size:12px}
+.tl::before{content:'';position:absolute;left:-22px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--bg);border:1.5px solid var(--border2)}
+.tl.now::before{background:var(--info);border-color:var(--info);box-shadow:0 0 0 4px var(--info-bg)}
+.tl.done::before{background:var(--success);border-color:var(--success)}
+.tl-week{font-size:11px;color:var(--tertiary);font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.tl-title{font-size:13px;font-weight:900;color:var(--primary);margin-bottom:3px}
+.tl-desc{font-size:11px;color:var(--secondary);line-height:1.58}
+@media(max-width:850px){
+ body{padding:10px}.bp{padding:12px}h1{font-size:23px}
+ .row{display:block}.row-label{display:block;margin-bottom:4px}
+ .grid-2,.grid-3{grid-template-columns:1fr}
+ .three-up,.four-up{grid-template-columns:1fr}
+ .three-up>div,.four-up>div{border-right:none!important}
+}
+</style>
+</head>
+<body>
+<div class="bp">
+  <div class="hero">
+    <div class="kicker">Celebr8 · Production Functional App Specification · Build-Ready Document</div>
+    <h1>Complete production build specification for Claude Code / AI developer agent</h1>
+    <p>
+      This document converts the Celebr8 3D master blueprint into a production-ready functional app specification.
+      It defines the exact product scope, responsive screens, flows, database, APIs, UI states, Stripe/Supabase/Vercel setup,
+      security, validations, acceptance criteria, and build order. Use this document together with the visual blueprint
+      as the implementation guide for building the real website.
+    </p>
+    <div class="badges">
+      <span class="tag t-prod">Production spec</span>
+      <span class="tag t-mvp">50-template MVP</span>
+      <span class="tag t-db">Supabase DB/Auth/Storage</span>
+      <span class="tag t-api">Stripe + Vercel</span>
+      <span class="tag t-ui">Responsive: mobile/tablet/desktop</span>
+      <span class="tag t-sec">Security + watermark</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showT(event,'overview')">Product contract</div>
+    <div class="tab" onclick="showT(event,'stack')">Stack/setup</div>
+    <div class="tab" onclick="showT(event,'routes')">Routes/screens</div>
+    <div class="tab" onclick="showT(event,'flows')">User flows</div>
+    <div class="tab" onclick="showT(event,'ui')">UI components</div>
+    <div class="tab" onclick="showT(event,'templates')">Template engine</div>
+    <div class="tab" onclick="showT(event,'database')">Database SQL</div>
+    <div class="tab" onclick="showT(event,'api')">API contracts</div>
+    <div class="tab" onclick="showT(event,'billing')">Billing/plans</div>
+    <div class="tab" onclick="showT(event,'security')">Security/RLS</div>
+    <div class="tab" onclick="showT(event,'responsive')">Responsive rules</div>
+    <div class="tab" onclick="showT(event,'testing')">QA checklist</div>
+    <div class="tab" onclick="showT(event,'build')">Claude build order</div>
+    <div class="tab" onclick="showT(event,'launch')">Launch checklist</div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="panel active">
+    <div class="section-label">Final MVP product contract</div>
+    <div class="ok"><strong>Build goal:</strong> Create a live, responsive, production-quality invitation web app where users can browse 50 premium templates, preview/edit an invite before login, sign up to save, share via public link/WhatsApp/QR, collect RSVP responses, track guests in dashboard, and pay to remove watermark/unlock premium limits.</div>
+
+    <div class="section-label">MVP features that must be fully functional</div>
+    <div class="cards">
+      <div class="card"><div class="card-title"><span class="dot d-black"></span>Public landing page</div><div class="card-desc">Modern 3D-style landing page with hero, how-it-works animation area, template categories, featured templates, pricing, FAQ and CTA.</div><span class="tag t-ui">public</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-purple"></span>50 template gallery</div><div class="card-desc">Templates filtered by event category, language support, premium/free, and style. Real seed data included.</div><span class="tag t-mvp">core</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-coral"></span>Try-before-login editor</div><div class="card-desc">Users can edit name/date/location/message temporarily. Save/send/export requires login. Watermark stays until paid.</div><span class="tag t-prod">conversion</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-teal"></span>Auth + dashboard</div><div class="card-desc">Supabase auth with email/password and Google-ready structure. Dashboard shows events, plan usage, RSVP stats.</div><span class="tag t-db">auth</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-amber"></span>Guest manager</div><div class="card-desc">Manual add/edit/delete guests, CSV import validation, guest group, language preference, RSVP status.</div><span class="tag t-api">guests</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-blue"></span>Public invite + RSVP</div><div class="card-desc">Public invite URL with envelope-style reveal, language switch, map link, RSVP form, add-to-calendar link.</div><span class="tag t-ui">guest</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-red"></span>Stripe billing</div><div class="card-desc">Starter/Premium/Family plans, checkout, webhook handling, plan limits, watermark removal after paid status.</div><span class="tag t-api">payment</span></div>
+      <div class="card"><div class="card-title"><span class="dot d-teal"></span>AI FAQ assistant</div><div class="card-desc">Site FAQ helper that answers only product support questions. AI copy generation reserved for post-MVP.</div><span class="tag t-mvp">safe AI</span></div>
+    </div>
+
+    <div class="section-label">Non-negotiable product rules</div>
+    <div class="feature"><span class="num">R1</span><div class="text"><strong>Do not build as a static prototype.</strong> Every dashboard feature must connect to Supabase and persist data.</div></div>
+    <div class="feature"><span class="num">R2</span><div class="text"><strong>Do not require login to browse or try.</strong> Login appears only when saving, sending, exporting, or removing watermark.</div></div>
+    <div class="feature"><span class="num">R3</span><div class="text"><strong>Do not implement paid WhatsApp API in MVP.</strong> Use WhatsApp deeplink/manual share first to keep cost low.</div></div>
+    <div class="feature"><span class="num">R4</span><div class="text"><strong>Do not promise screenshot blocking.</strong> Use watermark overlay, paid unlock, and clear product rules instead.</div></div>
+    <div class="feature"><span class="num">R5</span><div class="text"><strong>Mobile-first required.</strong> Every screen must work cleanly at 390px, tablet, and desktop.</div></div>
+
+    <div class="section-label">MVP exclusions — explicitly do not build in first production version</div>
+    <div class="three-up">
+      <div class="head">Feature</div><div class="head">Status</div><div class="head">Reason</div>
+      <div>680 templates</div><div class="bad">Do not build</div><div>Launch with 50; expand after demand.</div>
+      <div>Automated bulk WhatsApp via Twilio</div><div class="bad">Post-MVP</div><div>Business approval/cost complexity.</div>
+      <div>SMS fallback</div><div class="bad">Post-MVP</div><div>Usage cost and compliance.</div>
+      <div>AI image editing/portrait insertion</div><div class="bad">Post-MVP</div><div>Expensive, privacy-heavy, complex.</div>
+      <div>Video MP4 rendering</div><div class="bad">Post-MVP</div><div>Server rendering cost.</div>
+      <div>Full drag-and-drop designer</div><div class="bad">Post-MVP</div><div>MVP uses controlled form fields and template renderer.</div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <div id="stack" class="panel">
+    <div class="section-label">Required production stack</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">Frontend</div><div class="card-desc">Next.js App Router, React, TypeScript, Tailwind CSS, Framer Motion, shadcn/ui or custom UI components.</div><span class="tag t-ui">Next.js</span></div>
+      <div class="card"><div class="card-title">Backend</div><div class="card-desc">Next.js route handlers/server actions for app-specific logic. Supabase for database/auth/storage.</div><span class="tag t-api">API</span></div>
+      <div class="card"><div class="card-title">Database</div><div class="card-desc">Supabase Postgres with RLS, indexes, triggers, seed data for templates and plans.</div><span class="tag t-db">Postgres</span></div>
+      <div class="card"><div class="card-title">Auth</div><div class="card-desc">Supabase Auth. Email/password required. Google OAuth optional but structure should be ready.</div><span class="tag t-db">Auth</span></div>
+      <div class="card"><div class="card-title">Payments</div><div class="card-desc">Stripe Checkout + Stripe webhooks. Store plan status in subscriptions table.</div><span class="tag t-api">Stripe</span></div>
+      <div class="card"><div class="card-title">Deployment</div><div class="card-desc">Vercel production deploy, preview deploys, environment variables configured per environment.</div><span class="tag t-prod">Vercel</span></div>
+      <div class="card"><div class="card-title">Storage</div><div class="card-desc">Supabase Storage for template assets and user-uploaded invite images. Use size/type restrictions.</div><span class="tag t-sec">Storage</span></div>
+      <div class="card"><div class="card-title">Analytics</div><div class="card-desc">Simple internal analytics table for opens/RSVPs. Avoid heavy third-party analytics in MVP.</div><span class="tag t-db">Events</span></div>
+    </div>
+
+    <div class="section-label">Environment variables</div>
+    <pre class="code">NEXT_PUBLIC_APP_URL=https://your-domain.com
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...              # server only, never expose to browser
+STRIPE_SECRET_KEY=...
+STRIPE_WEBHOOK_SECRET=...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=...
+STRIPE_PRICE_STARTER=price_...
+STRIPE_PRICE_PREMIUM=price_...
+STRIPE_PRICE_FAMILY=price_...
+AI_PROVIDER_API_KEY=...                    # optional for FAQ assistant
+NEXT_PUBLIC_SUPPORT_EMAIL=support@yourdomain.com</pre>
+
+    <div class="section-label">Recommended project folder structure</div>
+    <pre class="code">celebr8/
+  app/
+    (public)/
+      page.tsx
+      templates/page.tsx
+      templates/[slug]/page.tsx
+      pricing/page.tsx
+      help/page.tsx
+      invite/[code]/page.tsx
+    (auth)/
+      auth/login/page.tsx
+      auth/signup/page.tsx
+      auth/reset/page.tsx
+    dashboard/
+      layout.tsx
+      page.tsx
+      create/page.tsx
+      events/[id]/editor/page.tsx
+      events/[id]/guests/page.tsx
+      events/[id]/share/page.tsx
+      events/[id]/rsvp/page.tsx
+      billing/page.tsx
+      settings/page.tsx
+    api/
+      templates/route.ts
+      events/route.ts
+      events/[id]/route.ts
+      guests/route.ts
+      guests/import/route.ts
+      rsvp/route.ts
+      checkout/route.ts
+      webhooks/stripe/route.ts
+      ai/faq/route.ts
+  components/
+    marketing/
+    templates/
+    editor/
+    dashboard/
+    invite/
+    billing/
+    ui/
+  lib/
+    supabase/
+    stripe/
+    auth/
+    validators/
+    template-engine/
+    permissions/
+  supabase/
+    migrations/
+    seed.sql
+  public/
+    template-assets/
+    og/
+  types/
+    database.ts
+    app.ts</pre>
+  </div>
+
+  <!-- ROUTES -->
+  <div id="routes" class="panel">
+    <div class="section-label">Complete route and screen specification</div>
+    <div class="four-up">
+      <div class="head">Route</div><div class="head">Access</div><div class="head">Purpose</div><div class="head">Must include</div>
+      <div>/</div><div>Public</div><div>Landing</div><div>3D hero, templates preview, how it works, pricing, FAQ, CTA</div>
+      <div>/templates</div><div>Public</div><div>Browse templates</div><div>Filters, 50 templates, free/premium tags, preview CTA</div>
+      <div>/templates/[slug]</div><div>Public</div><div>Template details</div><div>Large preview, language switch, customize CTA</div>
+      <div>/pricing</div><div>Public</div><div>Plans</div><div>Plan comparison, upgrade CTA, FAQ</div>
+      <div>/help</div><div>Public</div><div>FAQ</div><div>Search FAQ, AI assistant, support email</div>
+      <div>/invite/[code]</div><div>Public token</div><div>Guest invite</div><div>Envelope reveal, event details, RSVP form, add calendar</div>
+      <div>/auth/signup</div><div>Public</div><div>Create account</div><div>Email/password, Google-ready, continue draft</div>
+      <div>/auth/login</div><div>Public</div><div>Login</div><div>Email/password, forgot password, continue draft</div>
+      <div>/dashboard</div><div>Auth</div><div>User home</div><div>Stats, events, plan usage, quick actions</div>
+      <div>/dashboard/create</div><div>Auth</div><div>Create event</div><div>Wizard: type, template, details, language, preview</div>
+      <div>/dashboard/events/[id]/editor</div><div>Owner</div><div>Edit invite</div><div>Live preview, fields, watermark status, save</div>
+      <div>/dashboard/events/[id]/guests</div><div>Owner</div><div>Guests</div><div>Manual add, CSV import, table, groups, status</div>
+      <div>/dashboard/events/[id]/share</div><div>Owner</div><div>Share</div><div>Public link, QR, WhatsApp deeplink, preview</div>
+      <div>/dashboard/events/[id]/rsvp</div><div>Owner</div><div>Track RSVP</div><div>Status counts, response table, export CSV</div>
+      <div>/dashboard/billing</div><div>Auth</div><div>Billing</div><div>Current plan, upgrade, Stripe portal</div>
+      <div>/dashboard/settings</div><div>Auth</div><div>Settings</div><div>Profile, language, timezone, delete account</div>
+    </div>
+
+    <div class="section-label">Global layout requirements</div>
+    <div class="feature"><span class="num">L1</span><div class="text"><strong>Public layout:</strong> top nav with logo, Templates, Pricing, Help, Login, Create Invite CTA. Mobile collapses to hamburger.</div></div>
+    <div class="feature"><span class="num">L2</span><div class="text"><strong>Dashboard layout:</strong> desktop left sidebar; mobile bottom tab navigation with Dashboard, Events, Create, Billing, Settings.</div></div>
+    <div class="feature"><span class="num">L3</span><div class="text"><strong>Toast system:</strong> success/error loading toasts for save, payment, CSV import, RSVP and auth actions.</div></div>
+    <div class="feature"><span class="num">L4</span><div class="text"><strong>Empty states:</strong> no events, no guests, no RSVPs, no payment history all need friendly CTAs.</div></div>
+  </div>
+
+  <!-- FLOWS -->
+  <div id="flows" class="panel">
+    <div class="section-label">Primary user flow: browse → edit → login → save → share</div>
+    <div class="timeline">
+      <div class="tl now"><div class="tl-week">Public</div><div class="tl-title">1. User lands on homepage</div><div class="tl-desc">User sees hero, examples, categories and Create Invite CTA. No login required.</div></div>
+      <div class="tl"><div class="tl-week">Public</div><div class="tl-title">2. User chooses template</div><div class="tl-desc">From /templates or homepage featured templates. User can filter by Wedding, Birthday, Housewarming, Baby, Festival, Corporate.</div></div>
+      <div class="tl"><div class="tl-week">Temporary editor</div><div class="tl-title">3. User customizes sample</div><div class="tl-desc">Fields save only in browser local/session state. Show watermark and a sticky CTA: “Create account to save this invite.”</div></div>
+      <div class="tl"><div class="tl-week">Auth gate</div><div class="tl-title">4. User clicks Save or Share</div><div class="tl-desc">Prompt login/signup. After auth, convert temporary draft into a saved event.</div></div>
+      <div class="tl"><div class="tl-week">Dashboard</div><div class="tl-title">5. User completes event</div><div class="tl-desc">Add event details, guests, language default, RSVP settings and venue map link.</div></div>
+      <div class="tl"><div class="tl-week">Share</div><div class="tl-title">6. User shares invite</div><div class="tl-desc">Copy link, WhatsApp deeplink and QR code. No automated paid messaging in MVP.</div></div>
+      <div class="tl"><div class="tl-week">Guest RSVP</div><div class="tl-title">7. Guests respond</div><div class="tl-desc">Public invite page collects RSVP status and optional message. Dashboard updates immediately after refresh/realtime.</div></div>
+    </div>
+
+    <div class="section-label">Important state rules</div>
+    <div class="three-up">
+      <div class="head">State</div><div class="head">Storage</div><div class="head">Behavior</div>
+      <div>Temporary draft before login</div><div>localStorage/sessionStorage</div><div>Expires after 7 days or clear when converted to event.</div>
+      <div>Saved draft</div><div>Supabase events + event_content</div><div>Visible in dashboard. Can be edited by owner only.</div>
+      <div>Published invite</div><div>Supabase events.status = published</div><div>Public invite page accessible via invite code.</div>
+      <div>Paid event</div><div>payments/subscriptions</div><div>Watermark removed based on active plan or event purchase.</div>
+      <div>Expired RSVP</div><div>events.rsvp_deadline</div><div>Show closed message; owner can reopen from dashboard.</div>
+    </div>
+  </div>
+
+  <!-- UI -->
+  <div id="ui" class="panel">
+    <div class="section-label">Core reusable components</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">TemplateCard</div><div class="card-desc">Shows template thumbnail/render, title, category, free/premium tag, language support, hover lift.</div></div>
+      <div class="card"><div class="card-title">InvitePreview</div><div class="card-desc">Renders selected template with event data. Supports watermark overlay, language switching and responsive preview.</div></div>
+      <div class="card"><div class="card-title">EnvelopeReveal</div><div class="card-desc">Framer Motion animation for public invite opening. Must allow skip/reduced motion.</div></div>
+      <div class="card"><div class="card-title">EventEditorForm</div><div class="card-desc">Controlled fields for names, title, date/time, venue, message, image, RSVP deadline.</div></div>
+      <div class="card"><div class="card-title">LanguageSwitcher</div><div class="card-desc">Switches invite text between en, te, hi. Does not change entire website UI in MVP.</div></div>
+      <div class="card"><div class="card-title">WatermarkOverlay</div><div class="card-desc">Visible for free/demo/unpaid states. Removed only after payment/eligible plan.</div></div>
+      <div class="card"><div class="card-title">GuestTable</div><div class="card-desc">Search, filter, add/edit/delete guests, group tags, RSVP status badges.</div></div>
+      <div class="card"><div class="card-title">CSVImporter</div><div class="card-desc">Upload CSV, validate columns, preview errors, import valid rows only.</div></div>
+      <div class="card"><div class="card-title">QRCodePanel</div><div class="card-desc">Displays QR code for invite link with download button only if plan allows no-watermark export.</div></div>
+      <div class="card"><div class="card-title">PlanUsageMeter</div><div class="card-desc">Shows event/guest limits and upgrade CTA.</div></div>
+      <div class="card"><div class="card-title">AIHelpWidget</div><div class="card-desc">FAQ helper. Restrict to product support context. Include fallback to support email.</div></div>
+      <div class="card"><div class="card-title">ResponsiveShell</div><div class="card-desc">Public nav, dashboard sidebar/bottom nav, consistent layout spacing.</div></div>
+    </div>
+
+    <div class="section-label">Design system tokens</div>
+    <div class="box">
+      <div class="row"><span class="row-label">Brand feel</span><span>Premium Indian celebration: warm gold, deep maroon, ivory, soft purple, modern glass cards.</span></div>
+      <div class="row"><span class="row-label">Typography</span><span>Use clean sans font for UI; template renderer may use decorative fonts per design. Ensure Telugu/Hindi support.</span></div>
+      <div class="row"><span class="row-label">Buttons</span><span>Primary: Create/Save/Upgrade. Secondary: Preview/Copy/Cancel. Danger: Delete only with confirmation.</span></div>
+      <div class="row"><span class="row-label">Animations</span><span>Subtle, premium, never blocking. Every animation must have reduced-motion fallback.</span></div>
+      <div class="row"><span class="row-label">Loading</span><span>Use skeletons for cards/tables/dashboard. Avoid plain full-page spinners except auth callback.</span></div>
+    </div>
+  </div>
+
+  <!-- TEMPLATES -->
+  <div id="templates" class="panel">
+    <div class="section-label">Template engine production requirements</div>
+    <div class="ok"><strong>Architecture:</strong> templates are data-driven. Do not hardcode 50 separate React pages. Use 10 base layout components + config variations to create 50 templates.</div>
+
+    <div class="section-label">Launch template distribution</div>
+    <div class="three-up">
+      <div class="head">Category</div><div class="head">Count</div><div class="head">Required styles</div>
+      <div>Wedding</div><div class="good">15</div><div>Telugu traditional, South Indian, royal, floral, modern minimal, temple, couple photo.</div>
+      <div>Birthday</div><div class="good">10</div><div>Kids, first birthday, milestone, elegant adult, photo-based, colorful party.</div>
+      <div>Housewarming</div><div class="good">8</div><div>Gruhapravesam, kalasam, diya, modern home, Satyanarayana Vratham style.</div>
+      <div>Baby Events</div><div class="good">7</div><div>Baby shower, naming, Annaprashana, cradle, pastel, playful.</div>
+      <div>Festivals</div><div class="good">5</div><div>Diwali, Sankranti, Ugadi, Holi, Eid/Christmas generic celebration.</div>
+      <div>Corporate/Others</div><div class="good">5</div><div>Grand opening, office party, inauguration, conference, NRI reunion.</div>
+    </div>
+
+    <div class="section-label">Template renderer contract</div>
+    <pre class="code">type TemplateConfig = {
+  id: string;
+  slug: string;
+  name: string;
+  category: "wedding" | "birthday" | "housewarming" | "baby" | "festival" | "corporate";
+  baseLayout: "centered-card" | "photo-hero" | "split-card" | "mandap-frame" | "minimal-luxe" | "festival-poster" | "kids-playful" | "corporate-clean" | "temple-arch" | "floral-frame";
+  isPremium: boolean;
+  supportedLanguages: ("en" | "te" | "hi")[];
+  supportsPhoto: boolean;
+  colors: { primary: string; accent: string; background: string; text: string };
+  assets: { background?: string; motif?: string; frame?: string };
+  defaultCopy: {
+    en: TemplateCopy;
+    te: TemplateCopy;
+    hi: TemplateCopy;
+  };
+  fields: TemplateField[];
+}</pre>
+
+    <div class="section-label">Required editable fields</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">eventTitle</div><div class="card-desc">Example: Wedding Invitation, Gruhapravesam, Birthday Celebration.</div></div>
+      <div class="card"><div class="card-title">hostNames</div><div class="card-desc">Main names displayed on card. Couple name for wedding, child name for birthday, family name for housewarming.</div></div>
+      <div class="card"><div class="card-title">eventDate/eventTime</div><div class="card-desc">Stored as date/time/timezone. Rendered in friendly format.</div></div>
+      <div class="card"><div class="card-title">venueName/address</div><div class="card-desc">Venue and address. Public invite shows map link.</div></div>
+      <div class="card"><div class="card-title">message</div><div class="card-desc">Custom invite wording. Supports Telugu/Hindi input.</div></div>
+      <div class="card"><div class="card-title">rsvpDeadline</div><div class="card-desc">Optional deadline. If passed, RSVP form closes.</div></div>
+      <div class="card"><div class="card-title">photoUrl</div><div class="card-desc">Optional uploaded image only for templates that support photo.</div></div>
+      <div class="card"><div class="card-title">language</div><div class="card-desc">Default language for invite page. Guest can switch if enabled.</div></div>
+    </div>
+  </div>
+
+  <!-- DATABASE -->
+  <div id="database" class="panel">
+    <div class="section-label">Production database schema — Supabase/Postgres</div>
+    <div class="warn"><strong>Instruction for Claude Code:</strong> create this as a Supabase migration. Enable RLS on all user-owned tables. Add indexes before testing dashboard performance.</div>
+
+    <pre class="code">-- Enable extensions
+create extension if not exists "uuid-ossp";
+create extension if not exists pgcrypto;
+
+-- Enums
+create type event_status as enum ('draft','published','archived');
+create type rsvp_status as enum ('pending','accepted','maybe','declined');
+create type plan_key as enum ('free','starter','premium','family','corporate');
+create type template_category as enum ('wedding','birthday','housewarming','baby','festival','corporate');
+
+-- Profiles linked to Supabase auth.users
+create table public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  email text not null,
+  phone text,
+  country text default 'US',
+  default_language text default 'en' check (default_language in ('en','te','hi')),
+  timezone text default 'America/New_York',
+  avatar_url text,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table public.templates (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null,
+  name text not null,
+  category template_category not null,
+  base_layout text not null,
+  is_premium boolean default false,
+  supports_photo boolean default false,
+  supported_languages text[] default array['en','te','hi'],
+  thumbnail_url text,
+  preview_image_url text,
+  config jsonb not null default '{}'::jsonb,
+  default_copy jsonb not null default '{}'::jsonb,
+  status text default 'active' check (status in ('active','hidden','draft')),
+  sort_order int default 0,
+  created_at timestamptz default now()
+);
+
+create table public.plans (
+  key plan_key primary key,
+  name text not null,
+  price_usd numeric(10,2) default 0,
+  max_events int,
+  max_guests_per_event int,
+  premium_templates boolean default false,
+  remove_watermark boolean default false,
+  csv_import boolean default false,
+  rsvp_dashboard boolean default false,
+  stripe_price_id text
+);
+
+create table public.subscriptions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  plan plan_key not null default 'free',
+  status text not null default 'active',
+  stripe_customer_id text,
+  stripe_subscription_id text,
+  current_period_end timestamptz,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table public.events (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  template_id uuid references public.templates(id),
+  title text not null,
+  category template_category not null,
+  status event_status default 'draft',
+  invite_code text unique not null default encode(gen_random_bytes(8), 'hex'),
+  default_language text default 'en' check (default_language in ('en','te','hi')),
+  event_date date,
+  event_time time,
+  timezone text default 'America/New_York',
+  venue_name text,
+  venue_address text,
+  map_url text,
+  rsvp_deadline timestamptz,
+  is_watermark_removed boolean default false,
+  published_at timestamptz,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table public.event_content (
+  id uuid primary key default gen_random_uuid(),
+  event_id uuid not null references public.events(id) on delete cascade,
+  language text not null check (language in ('en','te','hi')),
+  host_names text,
+  headline text,
+  message text,
+  custom_fields jsonb default '{}'::jsonb,
+  photo_url text,
+  unique(event_id, language)
+);
+
+create table public.guests (
+  id uuid primary key default gen_random_uuid(),
+  event_id uuid not null references public.events(id) on delete cascade,
+  name text not null,
+  email text,
+  phone text,
+  guest_group text default 'family',
+  preferred_language text default 'en' check (preferred_language in ('en','te','hi')),
+  invite_code text unique not null default encode(gen_random_bytes(8), 'hex'),
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table public.rsvps (
+  id uuid primary key default gen_random_uuid(),
+  event_id uuid not null references public.events(id) on delete cascade,
+  guest_id uuid references public.guests(id) on delete set null,
+  guest_name text not null,
+  status rsvp_status not null,
+  plus_ones int default 0 check (plus_ones >= 0),
+  message text,
+  dietary_preference text,
+  submitted_at timestamptz default now(),
+  unique(event_id, guest_id)
+);
+
+create table public.invite_opens (
+  id uuid primary key default gen_random_uuid(),
+  event_id uuid not null references public.events(id) on delete cascade,
+  guest_id uuid references public.guests(id) on delete set null,
+  invite_code text,
+  user_agent text,
+  ip_hash text,
+  opened_at timestamptz default now()
+);
+
+create table public.payments (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  event_id uuid references public.events(id) on delete set null,
+  plan plan_key,
+  amount numeric(10,2),
+  currency text default 'usd',
+  stripe_checkout_session_id text,
+  stripe_payment_intent_id text,
+  status text default 'pending',
+  created_at timestamptz default now()
+);
+
+create table public.audit_logs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references public.profiles(id) on delete set null,
+  action text not null,
+  entity_type text,
+  entity_id uuid,
+  metadata jsonb default '{}'::jsonb,
+  created_at timestamptz default now()
+);
+
+-- Indexes
+create index idx_templates_category on public.templates(category);
+create index idx_events_user_id on public.events(user_id);
+create index idx_events_invite_code on public.events(invite_code);
+create index idx_event_content_event_id on public.event_content(event_id);
+create index idx_guests_event_id on public.guests(event_id);
+create index idx_guests_invite_code on public.guests(invite_code);
+create index idx_rsvps_event_id on public.rsvps(event_id);
+create index idx_invite_opens_event_id on public.invite_opens(event_id);
+create index idx_payments_user_id on public.payments(user_id);</pre>
+  </div>
+
+  <!-- API -->
+  <div id="api" class="panel">
+    <div class="section-label">API endpoint contracts</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">GET /api/templates</div><div class="card-desc">Query: category, premium, language, search. Returns active templates only.</div><span class="tag t-api">public</span></div>
+      <div class="card"><div class="card-title">GET /api/templates/[slug]</div><div class="card-desc">Returns full template config, default copy and related templates.</div><span class="tag t-api">public</span></div>
+      <div class="card"><div class="card-title">POST /api/events</div><div class="card-desc">Auth required. Creates event from template and editor data. Enforces plan limits.</div><span class="tag t-sec">auth</span></div>
+      <div class="card"><div class="card-title">PATCH /api/events/[id]</div><div class="card-desc">Owner only. Updates event metadata/content. Validates fields.</div><span class="tag t-sec">owner</span></div>
+      <div class="card"><div class="card-title">POST /api/guests</div><div class="card-desc">Owner only. Adds one guest. Enforces max guests per plan.</div><span class="tag t-sec">owner</span></div>
+      <div class="card"><div class="card-title">POST /api/guests/import</div><div class="card-desc">Owner only. Validates CSV columns: name,email,phone,group,language.</div><span class="tag t-sec">owner</span></div>
+      <div class="card"><div class="card-title">GET /api/invite/[code]</div><div class="card-desc">Public. Returns published event data by invite code; no private owner info.</div><span class="tag t-api">public</span></div>
+      <div class="card"><div class="card-title">POST /api/rsvp</div><div class="card-desc">Public. Submits RSVP for event/guest. Rate-limited and validated.</div><span class="tag t-api">public</span></div>
+      <div class="card"><div class="card-title">POST /api/checkout</div><div class="card-desc">Auth required. Creates Stripe checkout session for plan or event upgrade.</div><span class="tag t-api">Stripe</span></div>
+      <div class="card"><div class="card-title">POST /api/webhooks/stripe</div><div class="card-desc">Stripe signed webhook. Updates payments/subscriptions and watermark flags.</div><span class="tag t-api">webhook</span></div>
+      <div class="card"><div class="card-title">POST /api/ai/faq</div><div class="card-desc">Accepts question. Returns support answer from approved FAQ context only.</div><span class="tag t-api">AI</span></div>
+      <div class="card"><div class="card-title">GET /api/export/rsvps</div><div class="card-desc">Owner only. Exports RSVP CSV for paid/eligible plans.</div><span class="tag t-sec">owner</span></div>
+    </div>
+
+    <div class="section-label">Example request/response contracts</div>
+    <pre class="code">POST /api/events
+Request:
+{
+  "templateId": "uuid",
+  "title": "Karthik & Keerthi Wedding",
+  "category": "wedding",
+  "defaultLanguage": "te",
+  "eventDate": "2026-08-15",
+  "eventTime": "18:30",
+  "timezone": "America/New_York",
+  "venueName": "Grand Hall",
+  "venueAddress": "123 Main St",
+  "content": {
+    "en": { "hostNames": "...", "headline": "...", "message": "..." },
+    "te": { "hostNames": "...", "headline": "...", "message": "..." },
+    "hi": { "hostNames": "...", "headline": "...", "message": "..." }
+  }
+}
+
+Response:
+{
+  "eventId": "uuid",
+  "inviteCode": "randomcode",
+  "status": "draft",
+  "redirectUrl": "/dashboard/events/{id}/editor"
+}
+
+POST /api/rsvp
+Request:
+{
+  "eventCode": "publicInviteCode",
+  "guestCode": "optionalGuestCode",
+  "guestName": "Ravi Kumar",
+  "status": "accepted",
+  "plusOnes": 2,
+  "message": "Congratulations!",
+  "dietaryPreference": "Vegetarian"
+}
+
+Response:
+{
+  "success": true,
+  "status": "accepted",
+  "submittedAt": "timestamp"
+}</pre>
+  </div>
+
+  <!-- BILLING -->
+  <div id="billing" class="panel">
+    <div class="section-label">Plan rules and enforcement</div>
+    <div class="four-up">
+      <div class="head">Plan</div><div class="head">Price</div><div class="head">Limits</div><div class="head">Features</div>
+      <div>Free Preview</div><div>$0</div><div>No saved live event, demo/local edit only</div><div>Browse, preview, watermark, no send/export</div>
+      <div>Starter</div><div>$4.99 per event</div><div>1 event, 50 guests</div><div>Basic/free templates, share link, QR, watermark removed for event</div>
+      <div>Premium</div><div>$9.99 per event</div><div>1 event, 250 guests</div><div>All templates, CSV import, RSVP dashboard, watermark removed</div>
+      <div>Family</div><div>$14.99/month</div><div>5 active events, 500 guests/month</div><div>All templates, dashboard, CSV, reusable family events</div>
+      <div>Corporate</div><div>Custom</div><div>Manual approval</div><div>Team seats, branded events, later bulk messaging</div>
+    </div>
+
+    <div class="section-label">Billing logic</div>
+    <div class="feature"><span class="num">B1</span><div class="text"><strong>Free preview:</strong> user can test editor, but saving/publishing requires account. Public demo includes watermark.</div></div>
+    <div class="feature"><span class="num">B2</span><div class="text"><strong>Starter/Premium event purchase:</strong> payment can unlock one specific event. Set events.is_watermark_removed = true after successful webhook.</div></div>
+    <div class="feature"><span class="num">B3</span><div class="text"><strong>Family monthly:</strong> active subscription unlocks plan limits while subscription status is active.</div></div>
+    <div class="feature"><span class="num">B4</span><div class="text"><strong>Premium templates:</strong> selecting a premium template is allowed for preview but saving/publishing requires Premium/Family or event upgrade.</div></div>
+    <div class="feature"><span class="num">B5</span><div class="text"><strong>Watermark removal:</strong> remove only after confirmed Stripe webhook, not immediately after checkout redirect.</div></div>
+
+    <div class="section-label">Stripe webhook events to handle</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">checkout.session.completed</div><div class="card-desc">Create/update payment, unlock event or subscription based on metadata.</div></div>
+      <div class="card"><div class="card-title">customer.subscription.created</div><div class="card-desc">Create subscription record with plan and period end.</div></div>
+      <div class="card"><div class="card-title">customer.subscription.updated</div><div class="card-desc">Update plan/status/current_period_end.</div></div>
+      <div class="card"><div class="card-title">customer.subscription.deleted</div><div class="card-desc">Downgrade to free after period end/status canceled.</div></div>
+      <div class="card"><div class="card-title">invoice.payment_failed</div><div class="card-desc">Mark subscription past_due and show billing warning.</div></div>
+    </div>
+  </div>
+
+  <!-- SECURITY -->
+  <div id="security" class="panel">
+    <div class="section-label">Production security requirements</div>
+    <div class="warn"><strong>Screenshot reality:</strong> browsers cannot truly block screenshots. Implement visible watermark, paid unlock, no high-resolution export until paid, and legal terms instead.</div>
+
+    <div class="feature"><span class="num">S1</span><div class="text"><strong>RLS required:</strong> profiles, events, event_content, guests, payments, subscriptions and RSVP owner dashboard data must use row-level security.</div></div>
+    <div class="feature"><span class="num">S2</span><div class="text"><strong>Public invite safety:</strong> /invite/[code] must expose only event data required for guests. Do not expose owner email, billing, internal IDs.</div></div>
+    <div class="feature"><span class="num">S3</span><div class="text"><strong>Input validation:</strong> validate all API inputs with Zod or equivalent. Reject oversized strings and unsupported languages/categories.</div></div>
+    <div class="feature"><span class="num">S4</span><div class="text"><strong>XSS protection:</strong> sanitize user invite message and render text safely, never dangerouslySetInnerHTML for user content.</div></div>
+    <div class="feature"><span class="num">S5</span><div class="text"><strong>Rate limit:</strong> RSVP submissions, AI FAQ, auth-sensitive endpoints and CSV import.</div></div>
+    <div class="feature"><span class="num">S6</span><div class="text"><strong>File upload:</strong> only jpg/png/webp, max 5MB for MVP, store with private owner path, generate public signed URLs only when needed.</div></div>
+    <div class="feature"><span class="num">S7</span><div class="text"><strong>Webhook verification:</strong> Stripe webhook must verify signature using STRIPE_WEBHOOK_SECRET.</div></div>
+    <div class="feature"><span class="num">S8</span><div class="text"><strong>Service role key:</strong> never use service role key in client components. Server route only.</div></div>
+    <div class="feature"><span class="num">S9</span><div class="text"><strong>Audit logs:</strong> log event creation, payment unlock, guest import, RSVP export, delete event.</div></div>
+    <div class="feature"><span class="num">S10</span><div class="text"><strong>Legal pages:</strong> Terms, Privacy, Refund Policy and Contact must exist before payment launch.</div></div>
+
+    <div class="section-label">RLS policy examples</div>
+    <pre class="code">-- Enable RLS
+alter table public.events enable row level security;
+alter table public.event_content enable row level security;
+alter table public.guests enable row level security;
+alter table public.payments enable row level security;
+
+-- Events owner policies
+create policy "Users can view own events"
+on public.events for select
+using (auth.uid() = user_id);
+
+create policy "Users can insert own events"
+on public.events for insert
+with check (auth.uid() = user_id);
+
+create policy "Users can update own events"
+on public.events for update
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+create policy "Users can delete own events"
+on public.events for delete
+using (auth.uid() = user_id);
+
+-- Public invite read can be done through server route, not direct anonymous table policy.
+-- Use /api/invite/[code] route to fetch sanitized public data.</pre>
+  </div>
+
+  <!-- RESPONSIVE -->
+  <div id="responsive" class="panel">
+    <div class="section-label">Responsive behavior: mobile, tablet, desktop</div>
+    <div class="three-up">
+      <div class="head">Breakpoint</div><div class="head">Layout</div><div class="head">Rules</div>
+      <div>Mobile 360–480px</div><div>Single column</div><div>Bottom dashboard nav, sticky CTA, reduced 3D, 44px touch targets, no side-by-side editor.</div>
+      <div>Tablet 768–1024px</div><div>Two column where safe</div><div>Editor can show form + preview stacked or split depending width. Larger tap targets.</div>
+      <div>Desktop 1200px+</div><div>Full split layout</div><div>Dashboard sidebar, editor form left and live preview right, wider tables.</div>
+    </div>
+
+    <div class="section-label">Critical responsive screens</div>
+    <div class="feature"><span class="num">M1</span><div class="text"><strong>Homepage:</strong> hero text first, 3D cards below on mobile. On desktop hero text left and cards right.</div></div>
+    <div class="feature"><span class="num">M2</span><div class="text"><strong>Templates:</strong> 2-column cards on mobile if readable, 3–4 columns tablet, 4–5 desktop.</div></div>
+    <div class="feature"><span class="num">M3</span><div class="text"><strong>Editor:</strong> mobile uses tabs: Details / Preview. Desktop uses split panel.</div></div>
+    <div class="feature"><span class="num">M4</span><div class="text"><strong>Guest table:</strong> mobile uses card list; desktop uses data table.</div></div>
+    <div class="feature"><span class="num">M5</span><div class="text"><strong>Public invite:</strong> must look excellent on mobile because most guests open via WhatsApp.</div></div>
+    <div class="feature"><span class="num">M6</span><div class="text"><strong>Pricing:</strong> mobile stack plans; desktop comparison grid.</div></div>
+  </div>
+
+  <!-- TESTING -->
+  <div id="testing" class="panel">
+    <div class="section-label">Definition of done — acceptance criteria</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">Landing</div><div class="card-desc">Loads fast, responsive, all CTAs work, templates preview visible, no console errors.</div></div>
+      <div class="card"><div class="card-title">Templates</div><div class="card-desc">50 seed templates visible. Filters work. Premium/free labels accurate.</div></div>
+      <div class="card"><div class="card-title">Editor</div><div class="card-desc">Changes update preview instantly. Language switch works. Watermark appears when unpaid.</div></div>
+      <div class="card"><div class="card-title">Auth</div><div class="card-desc">Signup/login/logout/reset works. Temporary draft converts after login.</div></div>
+      <div class="card"><div class="card-title">Dashboard</div><div class="card-desc">Shows only current user's events. Empty states and loading states work.</div></div>
+      <div class="card"><div class="card-title">Guests</div><div class="card-desc">Add/edit/delete, CSV import, validation errors, guest limit enforcement.</div></div>
+      <div class="card"><div class="card-title">Invite</div><div class="card-desc">Public invite loads by code. Invalid/archived invite shows safe error page.</div></div>
+      <div class="card"><div class="card-title">RSVP</div><div class="card-desc">Submit accepted/maybe/declined. Dashboard updates. Deadline blocks submission.</div></div>
+      <div class="card"><div class="card-title">Stripe</div><div class="card-desc">Checkout creates session. Webhook updates payment/plan. Watermark removal only after webhook.</div></div>
+      <div class="card"><div class="card-title">Security</div><div class="card-desc">RLS verified. User cannot access another user's event by changing URL.</div></div>
+    </div>
+
+    <div class="section-label">Manual QA checklist</div>
+    <div class="feature"><span class="num">QA1</span><div class="text">Create new account → create event → choose template → save → edit → publish.</div></div>
+    <div class="feature"><span class="num">QA2</span><div class="text">Browse/edit without login → click save → signup → confirm draft preserved.</div></div>
+    <div class="feature"><span class="num">QA3</span><div class="text">Upload valid CSV and invalid CSV. Show row-level error messages.</div></div>
+    <div class="feature"><span class="num">QA4</span><div class="text">Open public invite on mobile. RSVP accepted. Verify dashboard counts.</div></div>
+    <div class="feature"><span class="num">QA5</span><div class="text">Try accessing another user's dashboard event URL. Must deny.</div></div>
+    <div class="feature"><span class="num">QA6</span><div class="text">Run Stripe test checkout. Verify webhook changes plan/watermark.</div></div>
+    <div class="feature"><span class="num">QA7</span><div class="text">Test mobile 390px, tablet 768px, desktop 1440px.</div></div>
+    <div class="feature"><span class="num">QA8</span><div class="text">Run Lighthouse. Target 90+ MVP, 95+ after optimization.</div></div>
+  </div>
+
+  <!-- BUILD -->
+  <div id="build" class="panel">
+    <div class="section-label">Claude Code build order — no skipping</div>
+    <div class="timeline">
+      <div class="tl now"><div class="tl-week">Step 0</div><div class="tl-title">Initialize app and verify tools</div><div class="tl-desc">Create Next.js TS app, Tailwind, ESLint, env validation, Supabase client, Stripe client, Vercel-ready config.</div></div>
+      <div class="tl"><div class="tl-week">Step 1</div><div class="tl-title">Database migration + seed</div><div class="tl-desc">Create tables, RLS, indexes, plans, 50 template seed records. Verify in Supabase dashboard.</div></div>
+      <div class="tl"><div class="tl-week">Step 2</div><div class="tl-title">Public UI shell</div><div class="tl-desc">Build homepage, nav, footer, templates listing, pricing, help. No auth dependency yet.</div></div>
+      <div class="tl"><div class="tl-week">Step 3</div><div class="tl-title">Template renderer</div><div class="tl-desc">Build 10 base layouts + config renderer + watermark overlay + language switch.</div></div>
+      <div class="tl"><div class="tl-week">Step 4</div><div class="tl-title">Try-before-login editor</div><div class="tl-desc">Local draft editor, live preview, session persistence, auth gate modal for save/share/export.</div></div>
+      <div class="tl"><div class="tl-week">Step 5</div><div class="tl-title">Auth and dashboard</div><div class="tl-desc">Supabase auth, protected routes, dashboard shell, event CRUD, draft conversion after login.</div></div>
+      <div class="tl"><div class="tl-week">Step 6</div><div class="tl-title">Guests and RSVP</div><div class="tl-desc">Guest manager, CSV import, public invite route, RSVP submission, dashboard counts.</div></div>
+      <div class="tl"><div class="tl-week">Step 7</div><div class="tl-title">Sharing</div><div class="tl-desc">Copy link, WhatsApp deeplink, QR generation, public preview, add-to-calendar link.</div></div>
+      <div class="tl"><div class="tl-week">Step 8</div><div class="tl-title">Stripe billing</div><div class="tl-desc">Checkout, webhook, plan enforcement, watermark removal, billing dashboard.</div></div>
+      <div class="tl"><div class="tl-week">Step 9</div><div class="tl-title">Security and QA</div><div class="tl-desc">RLS tests, validation, rate limiting, legal pages, mobile QA, Lighthouse, production deploy.</div></div>
+    </div>
+
+    <div class="section-label">Master instruction for Claude Code</div>
+    <pre class="code">You are building Celebr8, a production MVP digital invitation platform.
+Use this production specification as the source of truth.
+Do not simplify into a static prototype.
+Build in the exact step order.
+After each step, run typecheck/lint/build and fix errors before continuing.
+Every user-owned feature must persist to Supabase.
+Every paid feature must be enforced server-side.
+Every page must be responsive for mobile, tablet and desktop.
+If a requested post-MVP feature appears, create a placeholder/roadmap note, not full implementation.
+Do not implement automated WhatsApp/SMS APIs in MVP.
+Use manual WhatsApp deeplink sharing.
+Use Stripe webhook confirmation before unlocking paid features.
+Use watermark overlay for free/unpaid previews.
+Use RLS and owner checks for dashboard data.</pre>
+  </div>
+
+  <!-- LAUNCH -->
+  <div id="launch" class="panel">
+    <div class="section-label">Production launch checklist</div>
+    <div class="cards">
+      <div class="card"><div class="card-title">Domain</div><div class="card-desc">Connect custom domain in Vercel. Configure HTTPS automatically.</div></div>
+      <div class="card"><div class="card-title">Supabase</div><div class="card-desc">Run migrations, enable RLS, configure Auth URL and redirect URLs.</div></div>
+      <div class="card"><div class="card-title">Stripe</div><div class="card-desc">Create products/prices, configure webhook endpoint, test checkout in test mode.</div></div>
+      <div class="card"><div class="card-title">Legal</div><div class="card-desc">Terms, Privacy, Refund Policy and Contact pages live before accepting payments.</div></div>
+      <div class="card"><div class="card-title">Email</div><div class="card-desc">Configure transactional email later if needed. MVP can operate without email sending beyond auth.</div></div>
+      <div class="card"><div class="card-title">Monitoring</div><div class="card-desc">Use Vercel logs, Supabase logs, Stripe dashboard and basic error boundaries.</div></div>
+      <div class="card"><div class="card-title">Seed templates</div><div class="card-desc">Verify all 50 templates render in English, Telugu and Hindi without overflow.</div></div>
+      <div class="card"><div class="card-title">Mobile test</div><div class="card-desc">Test public invite and RSVP on iPhone/Android viewport before launch.</div></div>
+    </div>
+
+    <div class="section-label">First live version success criteria</div>
+    <div class="ok">
+      Celebr8 v1 is launch-ready when a real user can visit the homepage, browse templates, customize an invite,
+      create an account, save the event, add guests, share a live invite link, receive RSVP responses, see dashboard
+      counts, upgrade via Stripe, and view the invite without watermark after successful payment.
+    </div>
+  </div>
+</div>
+
+<script>
+function showT(e,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  e.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
